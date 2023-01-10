@@ -1,0 +1,10 @@
+name: OriginTag
+version: 'Dependency'
+main: com.liangzi.OriginTag
+api-version: 1.18
+author: liangzi
+depend:
+  - OriginCore
+commands:
+  otag:
+    description: plugin command
