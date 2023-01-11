@@ -22,6 +22,7 @@ public class ConfigFactory {
     public ConfigFactory(){}
 
     public ConfigFactory(OriginTag plugin) {
+        this.plugin = plugin;
         initFile();
     }
 
@@ -32,10 +33,10 @@ public class ConfigFactory {
             configuration.load(new File(plugin.getDataFolder(),"config.yml"));
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
-            (new Sender(plugin)).sendToLogger("[OriginTag] &c&l配置文件不存在，正在生成配置文件....");
+            (new Sender(plugin)).sendToLogger("[OriginTag] &c&l配置文件不存在，生成默认配置....");
             plugin.saveDefaultConfig();
             initFile();
         }
-        (new Sender(plugin)).sendToLogger("[OriginTag] &c&l本地配置文件初始化成功，正在读取配置文件...");
+        (new Sender(plugin)).sendToLogger("[OriginTag] &b配置文件初始化成功，正在读取...");
     }
 }

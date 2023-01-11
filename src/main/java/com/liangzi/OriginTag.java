@@ -1,6 +1,8 @@
 package com.liangzi;
 
 import cn.originmc.plugins.origincore.hook.luckperms.LuckPermsManager;
+import cn.originmc.plugins.origincore.util.data.yaml.YamlElement;
+import cn.originmc.plugins.origincore.util.data.yaml.YamlManager;
 import cn.originmc.plugins.origincore.util.text.Sender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,6 +17,7 @@ public final class OriginTag extends JavaPlugin {
     private static int keynum;
     private Sender sender;
     private ConfigFactory factory;
+    private YamlManager yamlManager;
 
     public static JavaPlugin getInstance() {
         return instance;
@@ -32,7 +35,8 @@ public final class OriginTag extends JavaPlugin {
         instance = this;
         sender = new Sender(this);
         factory = new ConfigFactory(this);
-        (new Sender(this)).sendToLogger("[OriginTag] &aOriginTag Enabled");
+        yamlManager = new YamlManager(this, "OriginTag");
+        (new Sender(this)).sendToLogger("[OriginTag] &aOriginTag 启动成功");
 
         this.getCommand("otag").setExecutor(new OtagCommand());
 
@@ -88,6 +92,9 @@ public final class OriginTag extends JavaPlugin {
             return taglist;
         }
         else {return null;}
+    }
+    public YamlElement getConfigYamlElement() {
+        return yamlManager.getElement("config.yml");
     }
 }
 
