@@ -6,6 +6,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
+
 import static com.liangzi.OriginTag.yamlManager;
 
 /**
@@ -27,7 +29,19 @@ public class Tag {
     private String show;
     private String description;
     private final FileConfiguration configuration = new YamlConfiguration();
-    public Tag(){}
+    public Tag(String tag_id){
+        setTag_id(tag_id);
+        setKey((String) yamlManager.get("tags", "key"));
+        setShow((String) yamlManager.get("tags", "show"));
+        setDescription((String) yamlManager.get("tags", "description"));
+    }
+    /**
+     *
+     * @param key - 用于和meta比较判断玩家是否有称号
+     * @param tag_id - 称号的id，显示在tag.yml中
+     * @param show - 称号的实际展现， 显示为tag.yml中的tag_id的子键
+     * @param description - 称号的描述， 显示为tag.yml中的tag_id的子键
+     */
     public Tag(String key, String tag_id, String show, String description) {
         setKey(key);
         setTag_id(tag_id);
@@ -35,7 +49,7 @@ public class Tag {
         setDescription(description);
     }
     public void addTagToConfig() {
-        yamlManager.set("tags",("tags." + tag_id), key);
+        yamlManager.set("tags",("tags." + tag_id+".key"), key);
         yamlManager.set("tags", ("tags." + tag_id+".show"), show);
         yamlManager.set("tags", ("tags." + tag_id+".description"), description);
         yamlManager.save("tags");

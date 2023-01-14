@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,14 +24,13 @@ import java.util.List;
  */
 
 public class ConfigFactoryUtils {
-    private JavaPlugin plugin = OriginTag.getInstance();
+    private final JavaPlugin plugin = OriginTag.getInstance();
     private final FileConfiguration configuration = new YamlConfiguration();
 
     public ConfigFactoryUtils() {
     }
 
     public ConfigFactoryUtils(OriginTag plugin) {
-        this.plugin = plugin;
         initFile();
         loadiConfig();
     }
@@ -59,30 +59,43 @@ public class ConfigFactoryUtils {
             plugin.saveDefaultConfig();
             initFile();
         }
-        (new Sender(plugin)).sendToLogger("[OriginTag] &b配置文件初始化成功，正在读取...");
-
-
+        (new Sender(plugin)).sendToLogger("[OriginTag] &b正在读取配置文件...");
     }
 
     public void loadiConfig() {
         try {
             OriginTag.tags = OriginTag.yamlManager.getKeyList("tags", "tags", false);
+            (new Sender(plugin)).sendToLogger("[OriginTag] &a加载称号...");
         } catch (Exception e) {
-            e.printStackTrace();
-            (new Sender(plugin)).sendToLogger("[OriginTag] 加载称号失败，初始化...");
+            (new Sender(plugin)).sendToLogger("[OriginTag] &c加载称号文件“tags.yml”失败，初始化文件...");
             if (!OriginTag.yamlManager.hasElement("tags")) {
                 OriginTag.yamlManager.create("tags");
-                loadiConfig();
+
+                (new Sender(plugin)).sendToLogger("[OriginTag] &b创建了默认称号配置");
+
+                Tag default_tag = new Tag("defkey", "default", "show", "description");
+                default_tag.addTagToConfig();
+
+                OriginTag.tags = OriginTag.yamlManager.getKeyList("tags", "tags", false);
             }
         }
-        if (OriginTag.tags == null) {
+        if (OriginTag.yamlManager.hasElement("tags") && OriginTag.tags == null) {
+            (new Sender(plugin)).sendToLogger("[OriginTag] &c加载称号文件“tags.yml”成功，但是它是空的...");
+
             Tag default_tag = new Tag("defkey", "default", "show", "description");
             default_tag.addTagToConfig();
-
-            (new Sender(plugin)).sendToLogger("[OriginTag] 成功加载称号");
-
-            (new Sender(plugin)).sendToLogger("[OriginTag] 称号有：" + OriginTag.tags);
+            (new Sender(plugin)).sendToLogger("[OriginTag] &b创建了默认称号配置");
+            OriginTag.tags = OriginTag.yamlManager.getKeyList("tags", "tags", false);
         }
+        OriginTag.tagList = null;
+        loadTags();
 
+    }
+    public void loadTags() {
+        List<Tag> t = new ArrayList<>();
+        for (int i = 0; i < OriginTag.tags.size(); i++) {
+            t.add(new Tag(OriginTag.tags.get(i)));
+        }
+        OriginTag.tagList = t;
     }
 }

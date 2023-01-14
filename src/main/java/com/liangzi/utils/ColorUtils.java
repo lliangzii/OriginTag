@@ -1,6 +1,7 @@
 package com.liangzi.utils;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 /**
  * @Description 转义颜色工具
@@ -12,5 +13,8 @@ import org.bukkit.ChatColor;
 public class ColorUtils {
     public static String getColorStr(String str){
         return ChatColor.translateAlternateColorCodes('&',str);
+    }
+    public static void sendPlayerMsg(Player player, String msg){
+        player.sendMessage(ColorUtils.getColorStr("&a[strengthPlus] "+msg));
     }
 }
