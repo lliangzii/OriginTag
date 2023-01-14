@@ -6,6 +6,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import static com.liangzi.OriginTag.yamlManager;
+
 /**
  * @Description tag实例
  * @Author liangzi
@@ -17,7 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
     定义一个tag类
     1、与lp的元数据挂钩：有key与value属性
     2、自身的属性：tag_id、显示、描述
-    3、方法：读取配置中的称号、向配置中储存称号
  */
 
 public class Tag {
@@ -26,19 +27,18 @@ public class Tag {
     private String show;
     private String description;
     private final FileConfiguration configuration = new YamlConfiguration();
-    Tag(){}
-    Tag(String key, String tag_id, String show, String description) {
+    public Tag(){}
+    public Tag(String key, String tag_id, String show, String description) {
         setKey(key);
         setTag_id(tag_id);
         setShow(show);
         setDescription(description);
     }
     public void addTagToConfig() {
-        YamlManager yamlManager = new YamlManager(new OriginTag(), "OriginTag");
-        yamlManager.set("config.yml", tag_id, key);
-        yamlManager.set("config.yml", tag_id+".show", show);
-        yamlManager.set("config.yml", tag_id+".description", description);
-        yamlManager.save("config.yml");
+        yamlManager.set("tags",("tags." + tag_id), key);
+        yamlManager.set("tags", ("tags." + tag_id+".show"), show);
+        yamlManager.set("tags", ("tags." + tag_id+".description"), description);
+        yamlManager.save("tags");
     }
     public String getKey() {
         return key;
